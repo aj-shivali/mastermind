@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import './App.css';
 import GameBoard from './components/GameBoard';
 import ColorPicker from './components/ColorPicker';
@@ -27,12 +27,12 @@ function App() {
     const [resetTimer, setResetTimer] = useState(false);
     const [showExitConfirmation, setShowExitConfirmation] = useState(false);
 
-    const generateCode = (codeLength) => {
+    const generateCode = useCallback((codeLength) => {
         const shuffled = COLORS.slice().sort(() => 0.5 - Math.random());
         return shuffled.slice(0, codeLength);
-    };
+    }, []);
 
-    const newGame = () => {
+    const newGame = useCallback(() => {
         const { codeLength } = DIFFICULTIES[difficulty];
         setCode(generateCode(codeLength));
         setGuesses([]);
@@ -43,14 +43,14 @@ function App() {
         setIsRunning(true);
         setResetTimer(true);
         setTimeout(() => setResetTimer(false), 0);
-    };
+    }, [difficulty, generateCode]);
 
     useEffect(() => {
         if (difficulty) {
             newGame();
             setGameStarted(true);
         }
-    }, [difficulty]);
+    }, [difficulty, newGame]);
 
     const startNewGame = (selectedDifficulty) => {
         setDifficulty(selectedDifficulty);

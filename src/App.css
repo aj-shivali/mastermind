@@ -248,6 +248,7 @@ button:hover {
 .code-reveal {
   display: flex;
   margin: 20px 0;
+  gap: 10px;
 }
 
 @keyframes fadeIn {
